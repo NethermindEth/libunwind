@@ -44,6 +44,17 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
 #if defined __riscv_float_abi_double
 # define JB_MASK_SAVED  (208>>3)
 # define JB_MASK        (216>>3)
+#elif defined __riscv_float_abi_soft
+/* Without an FP ABI glibc drops the 12 callee-saved doubles from __jmp_buf,
+   leaving the 14 integer registers (112 bytes); musl's __jmp_buf is an
+   unsigned long[26] (208 bytes) whatever the ABI, so only glibc shifts.  */
+# if defined __GLIBC__
+#  define JB_MASK_SAVED (112>>3)
+#  define JB_MASK       (120>>3)
+# else
+#  define JB_MASK_SAVED (208>>3)
+#  define JB_MASK       (216>>3)
+# endif
 #else
 # error "Unsupported RISC-V floating point ABI"
 #endif /* __riscv_float_abi_double */
