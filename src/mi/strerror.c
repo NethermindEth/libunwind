@@ -49,3 +49,5 @@ unw_strerror (int err_code)
     }
   return cp;
 }
+
+/* CI baseline run: no functional change. */
